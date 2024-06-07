@@ -12,6 +12,12 @@ public class PhoneBook {
         this.sms = s;
     }
 
+    // Constructor of PhoneBook, creates an empty PhoneBook
+    public PhoneBook() {
+        contacts = new ArrayList<>();
+        contacts.add(new Contact("Yosi","5555"));
+    }
+
     // Add new contact to PhoneBook
     public void addContact(String name, String phone) {
         // add is a method for ArrayList and we used Contact constructor
@@ -61,6 +67,18 @@ public class PhoneBook {
         }
         return results;
     }
+
+        //Method that searches for all contacts with the same name that the user selected
+        public Contact findContact(String name) {
+            // Iterate over all contacts in the collection
+            for (Contact contact : contacts) {
+                // Check for the same name
+                if (contact.getName().equals(name)) {
+                    return contact;
+                }
+            }
+            return null;
+        }
 
     // Sort by name using Collections.sort
     public void sortByName() {
