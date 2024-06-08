@@ -49,14 +49,15 @@ public class PhoneBook {
     }
 
     //Method that searches for all contacts with the same name that the user selected
-    public ArrayList<Contact> searchContact(String name) {
+    public Contact searchContact(String name) {
         // Create a new ArrayList to store all occurrences of the name
-        ArrayList<Contact> results = new ArrayList<>();
+        Contact results = new Contact();
         // Iterate over all contacts in the collection
         for (Contact contact : contacts) {
             // Check for the same name
             if (contact.getName().equals(name)) {
-                results.add(contact);
+                results=contact;
+                break;
             }
         }
         return results;
@@ -184,10 +185,9 @@ public class PhoneBook {
                         System.out.print("Enter name to search: ");
                         name = scanner.nextLine();
                         // Create an ArrayList of all the occurrences of the name
-                        ArrayList<Contact> results = searchContact(name);
-                        for (Contact contact : results) {
-                            System.out.println(contact.ContactStringInfo());
-                        }
+                        Contact result = searchContact(name);
+                        System.out.println(result.ContactStringInfo());
+
                         break;
                     // 5. Sort by Name
                     case 5:
