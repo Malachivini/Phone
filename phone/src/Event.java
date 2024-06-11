@@ -15,6 +15,6 @@ public class Event extends Window {
 
     @Override
     public String toString() {
-        return "Event: " + super.toString() + " description='" + description + "'";
+        return "Event:   " + super.toString() + " description='" + description + "'";
     }
 }

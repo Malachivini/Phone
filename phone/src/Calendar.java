@@ -76,24 +76,10 @@ public class Calendar {
                 printMeetingsWithContact(scanner);
                 break;
             case 5:
-                for (Day day : days) {
-                    List<Window> windows = day.getWindows();
-                    windows.sort(Comparator.comparing(Window::getStartTime));
-                    for (int i = 0; i < windows.size() - 1; i++) {
-                        Window current = windows.get(i);
-                        Window next = windows.get(i + 1);
-                        if (current.overlapsWith(next)) {
-                            windows.remove(next);
-                            i--; // recheck the current index
-                            System.out.println("Removed overlapping window: " + next);
-                        }
-                    }
-                }
+                checkAndRemoveOverlaps();
                 break;
             case 6:
-                for (Day day : days) {
-                    day.getWindows().forEach(System.out::println);
-                }
+                printAllEvents();
                 break;
             case 7:
                 System.out.println("Exiting application.");
@@ -178,6 +164,22 @@ public class Calendar {
         }
     }
 
+    private void checkAndRemoveOverlaps() {
+        for (Day day : days) {
+            List<Window> windows = day.getWindows();
+            windows.sort(Comparator.comparing(Window::getStartTime));
+            for (int i = 0; i < windows.size() - 1; i++) {
+                Window current = windows.get(i);
+                Window next = windows.get(i + 1);
+                if (current.overlapsWith(next)) {
+                    windows.remove(next);
+                    i--; // recheck the current index
+                    System.out.println("Removed overlapping window: " + next);
+                }
+            }
+        }
+    }
+
     private void printMeetingsWithContact(Scanner scanner) {
         System.out.print("Enter contact name: ");
         String contactName = scanner.nextLine();
@@ -189,6 +191,14 @@ public class Calendar {
                     System.out.println(sdf.format(day.getDate()) + " " + window);
                 }
             }
+        }
+    }
+
+    private void printAllEvents() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        for (Day day : days) {
+            System.out.println("On " + sdf.format(day.getDate()) + ":");
+            day.getWindows().forEach(System.out::println);
         }
     }
 
