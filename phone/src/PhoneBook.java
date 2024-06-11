@@ -23,7 +23,7 @@ public class PhoneBook {
         // add is a method for ArrayList and we used Contact constructor
         if (!this.isNameAlreadyPresent(contacts, name) && (phone.length() == 10)){
             this.contacts.add(new Contact(name, phone));
-            System.out.println("Contact added successfully");
+            //System.out.println("Contact added successfully");
         }
         else
             System.out.println("Contact already exists or you entered " +
@@ -57,16 +57,14 @@ public class PhoneBook {
     //Method that searches for all contacts with the same name that the user selected
     public Contact searchContact(String name) {
         // Create a new ArrayList to store all occurrences of the name
-        Contact results = new Contact();
         // Iterate over all contacts in the collection
         for (Contact contact : contacts) {
             // Check for the same name
             if (contact.getName().equals(name)) {
-                results=contact;
-                break;
+                return contact;
             }
         }
-        return results;
+        return null;
     }
 
         //Method that searches for all contacts with the same name that the user selected

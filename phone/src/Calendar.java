@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
@@ -7,7 +10,7 @@ import java.util.Scanner;
 
 public class Calendar {
     private Day[] days;
-    private PhoneBook phoneBook;
+    public PhoneBook phoneBook;
     private Date startDate;
 
     public Calendar(PhoneBook phoneBook) {
@@ -83,7 +86,6 @@ public class Calendar {
                 break;
             case 7:
                 System.out.println("Exiting application.");
-                System.exit(0);
                 break;
             default:
                 System.out.println("Invalid option. Please try again.");
@@ -99,9 +101,14 @@ public class Calendar {
         System.out.print("Enter start time (HH:mm): ");
         String startTimeStr = scanner.nextLine();
         Date startTime = parseTime(startTimeStr);
+
         System.out.print("Enter duration (1-60 minutes): ");
         int duration = scanner.nextInt();
         scanner.nextLine(); // consume newline
+        if (duration < 1 || duration > 60) {
+            System.out.println("Invalid duration. It must be between 1 and 60 minutes.");
+            return;
+        }
 
         if (type.equalsIgnoreCase("Meeting")) {
             System.out.print("Enter contact name: ");
@@ -208,6 +215,87 @@ public class Calendar {
         } catch (ParseException e) {
             System.out.println("Invalid time format. Please use HH:mm.");
             return null;
+        }
+    }
+
+
+    private void removeMeetingsWithDeletedContacts() {
+        for (Day day : days) {
+            List<Window> windows = day.getWindows();
+            windows.removeIf(window -> window instanceof Meeting &&
+                    phoneBook.searchContact(((Meeting) window).getContact().getName()) == null);
+        }
+        //System.out.println("Removed all meetings with deleted contacts.");
+    }
+
+    public void loadWindowsFromFile(String fileName) throws IOException {
+    try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] parts = line.split(";");
+            if (parts.length != 5) {
+                System.out.println("Invalid line format: " + line);
+                continue;
+            }
+
+            int dayIndex;
+            try {
+                dayIndex = Integer.parseInt(parts[0]);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid day index in line: " + line);
+                continue;
+            }
+
+            String type = parts[1];
+            Date startTime = parseTime(parts[2]);
+            int duration;
+            try {
+                duration = Integer.parseInt(parts[3]);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid duration in line: " + line);
+                continue;
+            }
+
+            String contactOrDescription = parts[4];
+
+            if (dayIndex < 1 || dayIndex > 30 || duration < 1 || duration > 60 || startTime == null) {
+                System.out.println("Invalid data in line: " + line);
+                continue;
+            }
+
+            if (type.equalsIgnoreCase("Meeting")) {
+                Contact contact = phoneBook.searchContact(contactOrDescription);
+                if (contact != null) {
+                    getDay(dayIndex).addWindow(new Meeting(startTime, duration, contact));
+                    System.out.println("Added meeting: " + line);
+                } else {
+                    System.out.println("Contact not found for meeting in line: " + line);
+                }
+            } else if (type.equalsIgnoreCase("Event")) {
+                getDay(dayIndex).addWindow(new Event(startTime, duration, contactOrDescription));
+                System.out.println("Added event: " + line);
+            } else {
+                System.out.println("Invalid type in line: " + line);
+            }
+        }
+    }
+}
+
+
+    public void displayMenu() {
+        Scanner scanner = new Scanner(System.in);
+        removeMeetingsWithDeletedContacts();
+        while (true) {
+            printMenu();
+            System.out.print("Choose an option: ");
+            int option = scanner.nextInt();
+            scanner.nextLine(); // consume newline
+            handleMenuOption(option, scanner);
+
+            // Exit the calendar function for option 7
+            if (option == 7) {
+                return;
+            }
         }
     }
 

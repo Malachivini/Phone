@@ -4,16 +4,19 @@ import java.util.Scanner;
 public class Phone   {
     public PhoneBook phoneBook;
     public Sms sms;
+    public Calendar calendar;
     // add your collections ///
     public Phone() {
         this.sms = new Sms(this.phoneBook);
         this.phoneBook = new PhoneBook(this.sms);
+        this.calendar = new Calendar(this.phoneBook);
         //*  add them to the phone constractor*//
         
     }
     public void refreshData(){
         this.sms.phoneBook = phoneBook;
         this.phoneBook.sms=sms;
+        this.calendar.phoneBook = this.phoneBook;
         //-refresh their data*//
     }
     // start the phone menu and load data fron files
@@ -47,7 +50,7 @@ public class Phone   {
                     break;
                 //3. Calendar
                 case 3:
-                    //*Calendar menu*//
+                    CalendarMenu();
                     break;
                 //4. Media
                 case 4:
@@ -71,6 +74,10 @@ public class Phone   {
     private void smsMenu() {
         sms.displayMenu();
     }
+
+    private void CalendarMenu() {
+        this.calendar.displayMenu();
+    }
     // checks user choice an handle the error
     private int getUserInput() {
         Scanner scanner = new Scanner(System.in);
@@ -88,9 +95,9 @@ public class Phone   {
         try {
             phoneBook.loadFromFile("phonebook");
             sms.loadFromFile("sms");
+            calendar.loadWindowsFromFile("calendar.txt");
             // load data from media
-            // load data from calender
-            System.out.println("Phone book data loaded successfully.");
+            //System.out.println("Phone book data loaded successfully.");
         } catch (IOException e) {
             System.out.println("Error loading phone book data: " + e.getMessage());
         }
