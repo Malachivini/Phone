@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class Phone   {
     public PhoneBook phoneBook;
     public Sms sms;
-    // add your collections //
+    // add your collections ///
     public Phone() {
         this.sms = new Sms(this.phoneBook);
         this.phoneBook = new PhoneBook(this.sms);
