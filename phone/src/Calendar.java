@@ -225,7 +225,6 @@ public class Calendar {
             windows.removeIf(window -> window instanceof Meeting &&
                     phoneBook.searchContact(((Meeting) window).getContact().getName()) == null);
         }
-        //System.out.println("Removed all meetings with deleted contacts.");
     }
 
     public void loadWindowsFromFile(String fileName) throws IOException {
@@ -296,20 +295,6 @@ public class Calendar {
             if (option == 7) {
                 return;
             }
-        }
-    }
-
-    public static void main(String[] args) {
-        PhoneBook phoneBook = new PhoneBook();
-        Calendar calendar = new Calendar(phoneBook);
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            calendar.printMenu();
-            System.out.print("Choose an option: ");
-            int option = scanner.nextInt();
-            scanner.nextLine(); // consume newline
-            calendar.handleMenuOption(option, scanner);
         }
     }
 }
