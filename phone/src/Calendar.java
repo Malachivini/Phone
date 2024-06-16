@@ -266,13 +266,13 @@ public class Calendar {
                 Contact contact = phoneBook.searchContact(contactOrDescription);
                 if (contact != null) {
                     getDay(dayIndex).addWindow(new Meeting(startTime, duration, contact));
-                    System.out.println("Added meeting: " + line);
+                    //System.out.println("Added meeting: " + line);
                 } else {
                     System.out.println("Contact not found for meeting in line: " + line);
                 }
             } else if (type.equalsIgnoreCase("Event")) {
                 getDay(dayIndex).addWindow(new Event(startTime, duration, contactOrDescription));
-                System.out.println("Added event: " + line);
+                //System.out.println("Added event: " + line);
             } else {
                 System.out.println("Invalid type in line: " + line);
             }
