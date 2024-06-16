@@ -5,11 +5,13 @@ public class Phone   {
     public PhoneBook phoneBook;
     public Sms sms;
     public Calendar calendar;
+    public PhonesMedia phonesMedia;
     // add your collections ///
     public Phone() {
         this.sms = new Sms(this.phoneBook);
         this.phoneBook = new PhoneBook(this.sms);
         this.calendar = new Calendar(this.phoneBook);
+        this.phonesMedia = new PhonesMedia();
         //*  add them to the phone constractor*//
         
     }
@@ -54,7 +56,7 @@ public class Phone   {
                     break;
                 //4. Media
                 case 4:
-                    //*Media menu*//
+                    PhonesMediaMenu();
                     break;
                 //5. Exit
                 case 5:
@@ -78,6 +80,9 @@ public class Phone   {
     private void CalendarMenu() {
         this.calendar.displayMenu();
     }
+    private void PhonesMediaMenu() {
+        this.phonesMedia.displayMenu();
+    }
     // checks user choice an handle the error
     private int getUserInput() {
         Scanner scanner = new Scanner(System.in);
@@ -96,7 +101,7 @@ public class Phone   {
             phoneBook.loadFromFile("phonebook");
             sms.loadFromFile("sms");
             calendar.loadWindowsFromFile("calendar.txt");
-            // load data from media
+            phonesMedia.loadFromFile("media");
             //System.out.println("Phone book data loaded successfully.");
         } catch (IOException e) {
             System.out.println("Error loading phone book data: " + e.getMessage());
@@ -108,7 +113,7 @@ public class Phone   {
         try {
             phoneBook.saveToFile("phonebook");
             sms.saveToFile("sms");
-            //*save data for media*//
+            phonesMedia.saveToFile("media");
             //*save data for calender*//
             System.out.println("Phone book data saved successfully.");
         } catch (IOException e) {
